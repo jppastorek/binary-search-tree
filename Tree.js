@@ -35,14 +35,13 @@ export default class Tree {
     }
   }
 
-  find(value) {
-    let currentNode = this.root; //cannot use root because it wont update to be current if recursive
-    if (value == currentNode.data) return currentNode; //exit statement --> if the value is equal to current node
+  find(value, root) { //cannot use root because it wont update to be current if recursive
+    if (root == null) return null;
+    if (value == root.data) return root; //exit statement --> if the value is equal to current node
     
     //recursively check each mini tree's mid point
-    if (value < midPoint) {
-        let nextNode;
-    }
+    if (value < root.data) return this.find(value, root.left);
+    if (value > root.data) return this.find(value, root.right);
   }
 
   insert(value) {
