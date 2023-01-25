@@ -44,15 +44,28 @@ export default class Tree {
     if (value > root.data) return this.find(value, root.right);
   }
 
-  insert(value) {
-    //compare value to midpoint(s) until you find where it goes
-    if (value == this.root) return null;
+  insert(value, root) {
+    //exit statement
+    if (root == null) {
+      root = new Node(value);
+      return root;
+    };
 
-    const newNode = new Node(value);
-
-    if (value < this.root){
-
+    if (root.left == null && root.right == null) {
+      if (value < root.data) {
+        root.left = new Node(value);
+      }else {
+        root.right = new Node(value);
+      }
+      return root;
     }
+
+
+    //find the appropriate leaf
+    if (value < root.data) return this.insert(value, root.left);
+    if (value > root.data) return this.insert(value, root.right);
+    //place the node on the appropriate side
+    //return the new node
 
   }
 }
