@@ -78,27 +78,82 @@ export default class Tree {
       root.right = this.delete(value, root.right);
     } else {
       //leaf, just remove...one child copy to parent and delete child
-      //TODO  it recurses to the correct value, but something strange happens. when pretty print staerts again
+      //TODO  it recurses to the correct value, but something strange happens. when pretty print starts again
       //i notice that the first node's right is now undefined.
       if (root.left == null) {
         return root.right;
       } else if (root.right == null) {
         return root.left;
-      } else {
-        //two children, copy inorder successor (smallest right) and then delete inorder child (only if right child not empty)
-        root.data = inOrder(root.right);
-        root.right = this.delete(root.data, root.right);
       }
+      //two children, copy inorder successor (smallest right) and then delete inorder child (only if right child not empty)
+      root.data = this.inOrderSuccessor(root.right);
+      root.right = this.delete(root.data, root.right);
+
       return root;
     }
 
-    function inOrder(root) {
-      let inOrderChild = root.data;
-      while (root.left != null) {
-        inOrderChild = root.left.data;
-        root = root.left;
-      }
-      return inOrderChild;
+  }
+  inOrderSuccessor(root) {
+    let inOrderChild = root.data;
+    while (root.left != null) {
+      inOrderChild = root.left.data;
+      root = root.left;
     }
+    return inOrderChild;
+  }
+
+  levelOrder(callback) {
+    let node = this.root;
+    const q = [node]
+    const output = [];
+    while (q.length > 0) {
+      node = q.shift();
+      if (callback) callback(node);
+      if (node.left != null) q.push(node.left);
+      if (node.right != null) q.push(node.right);
+      output.push(node.data);
+    }
+    if (!callback) return output;
+  }
+
+  //root left right
+  preOrder(callback) {
+    let node = this.root;
+    const stack = [node];
+    const output = [];
+    while (stack.length > 0) {
+      node = stack.pop();
+      if (callback) callback(node.data);
+      output.push(node.data);
+      if (node.right != null) stack.push(node.right);
+      if (node.left != null) stack.push(node.left);
+    }
+    if (!callback) return output;
+  }
+
+  //left root right
+  inOrder(callback, node = this.root, output = []) {   
+    if (node == null) return node;
+
+    this.inOrder(callback, node.left, output);
+    if (callback) callback(node);
+    output.push(node.data);
+    this.inOrder(callback, node.right, output);
+    return output;
+  }
+
+  //left right root
+  postOrder(callback) {
+    let node = this.root;
+    const stack = [node];
+    const output = [];
+    while (stack.length > 0) {
+      node = stack.pop();
+      if (node.right != null) stack.push(node.right);
+      if (node.left != null) stack.push(node.left);
+      if (callback) callback(node.data);
+      output.push(node.data);
+    }
+    if (!callback) return output.reverse();
   }
 }
