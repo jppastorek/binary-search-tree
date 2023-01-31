@@ -87,7 +87,7 @@ export default class Tree {
       }
       //two children, copy inorder successor (smallest right) and then delete inorder child (only if right child not empty)
       root.data = this.inOrderSuccessor(root.right);
-      root.right = this.delete(root.data, root.right);
+      root.right = this.delete(value, root.right);
 
       return root;
     }
@@ -155,5 +155,28 @@ export default class Tree {
       output.push(node.data);
     }
     if (!callback) return output.reverse();
+  }
+
+
+  //longest distance from value to a leaf
+  height(value) {
+
+  }
+
+
+
+  //longest distance from value to the root
+  depth(value, root) {
+    let count = 0;
+    while (value != root.data) {
+      if (value < root.data){
+        root = root.left;
+      }else if (value > root.data) {
+        root = root.right;
+      }
+      count++;
+    }
+    
+    return count;
   }
 }

@@ -10,3 +10,5 @@ console.log(tree.levelOrder());
 console.log(tree.preOrder());
 console.log(tree.postOrder());
 console.log(tree.inOrder());
+
+console.log(tree.depth(4, tree.root));
